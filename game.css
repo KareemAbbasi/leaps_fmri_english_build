@@ -152,6 +152,10 @@ a {
   width: 100%;
 }
 
+#practice-title {
+  font-size: 1.5em;
+}
+
 #done-training-1 {
   margin-left: auto;
   margin-right: auto;
