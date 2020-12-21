@@ -8587,7 +8587,7 @@ var TrainingScene = function (_util$Entity2) {
       document.getElementById("done-training-4").addEventListener("click", this.onDonePart4.bind(this));
       document.getElementById("done-training-5").addEventListener("click", function (e) {
         _this3.done = true;
-
+        galleryShapes = [];
         sendTrigger("startGame");
       });
     }
