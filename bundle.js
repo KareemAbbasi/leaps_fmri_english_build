@@ -8586,7 +8586,10 @@ var TrainingScene = function (_util$Entity2) {
       document.getElementById("done-training-1").addEventListener("click", this.onDonePart1.bind(this));
       document.getElementById("done-training-2").addEventListener("click", this.onDonePart2.bind(this));
       document.getElementById("done-training-4").addEventListener("click", this.onDonePart4.bind(this));
-      document.getElementById("done-training-5").addEventListener("click", this.finishTraining.bind(this));
+      document.getElementById("done-training-5").addEventListener("click", function (e) {
+        letsPlayScene = true;
+        document.getElementById("pixi-canvas").focus();
+      });
     }
   }, {
     key: "finishTraining",
@@ -8663,7 +8666,7 @@ var TrainingScene = function (_util$Entity2) {
       document.getElementById('training-4').style.display = "none";
       document.getElementById('training-5').style.display = "block";
       document.getElementById("pixi-canvas").focus();
-      letsPlayScene = true;
+      // letsPlayScene = true;
       this.blockScene.removeBlocks();
     }
   }, {
