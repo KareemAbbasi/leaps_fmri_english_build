@@ -8373,6 +8373,8 @@ var DRAG_HIGHLIGHT_PERIOD = 500;
 var RED_METRICS_HOST = "api.creativeforagingtask.com";
 var RED_METRICS_GAME_VERSION = "b13751f1-637f-411b-8ce2-29b1b24fddf0";
 
+var letsPlayScene = false;
+
 var TRIGGERS = {
   "loadGame": 100, // When loads starts
   "startGame": 3, // When pressing the button "let's play" - (A "start game" trigger)
@@ -8566,8 +8568,6 @@ var TrainingScene = function (_util$Entity2) {
   createClass(TrainingScene, [{
     key: "setup",
     value: function setup() {
-      var _this3 = this;
-
       this.done = false;
       this.didDropBlock = false;
 
@@ -8582,14 +8582,19 @@ var TrainingScene = function (_util$Entity2) {
       this.blockScene.on("addedShape", this.onAddedShape, this);
 
       document.getElementById("training-gui").style.display = "block";
+      document.getElementById("pixi-canvas").addEventListener("keyup", this.onKeyUp.bind(this));
       document.getElementById("done-training-1").addEventListener("click", this.onDonePart1.bind(this));
       document.getElementById("done-training-2").addEventListener("click", this.onDonePart2.bind(this));
       document.getElementById("done-training-4").addEventListener("click", this.onDonePart4.bind(this));
-      document.getElementById("done-training-5").addEventListener("click", function (e) {
-        _this3.done = true;
-        galleryShapes = [];
-        sendTrigger("startGame");
-      });
+      document.getElementById("done-training-5").addEventListener("click", this.finishTraining.bind(this));
+    }
+  }, {
+    key: "finishTraining",
+    value: function finishTraining() {
+      this.done = true;
+      letsPlayScene = false;
+      galleryShapes = [];
+      sendTrigger("startGame");
     }
   }, {
     key: "update",
@@ -8657,6 +8662,20 @@ var TrainingScene = function (_util$Entity2) {
     value: function onDonePart4() {
       document.getElementById('training-4').style.display = "none";
       document.getElementById('training-5').style.display = "block";
+      document.getElementById("pixi-canvas").focus();
+      letsPlayScene = true;
+      this.blockScene.removeBlocks();
+    }
+  }, {
+    key: "onKeyUp",
+    value: function onKeyUp(e) {
+      // If they pressed a number key, add the shape
+      if (!isNaN(parseInt(e.key))) {
+        var keyValue = parseInt(e.key);
+        if (keyValue == 5 && letsPlayScene) {
+          this.finishTraining();
+        }
+      }
     }
   }]);
   return TrainingScene;
@@ -8770,6 +8789,13 @@ var BlockScene = function (_util$Entity3) {
       }
 
       this.updateBlocks();
+    }
+  }, {
+    key: "removeBlocks",
+    value: function removeBlocks() {
+      console.log('hello there!!!!!');
+      this.container.removeChild(this.blocksContainer);
+      this.blockGrid = [];
     }
   }, {
     key: "update",
@@ -9222,7 +9248,7 @@ var GalleryScene = function (_util$Entity4) {
   createClass(GalleryScene, [{
     key: "setup",
     value: function setup() {
-      var _this6 = this;
+      var _this5 = this;
 
       var ROWS = 5;
       var COLS = 10;
@@ -9248,7 +9274,7 @@ var GalleryScene = function (_util$Entity4) {
         if (i % (ROWS * COLS) == 0) {
           pageContainer = new PIXI.Container();
           pageContainer.visible = false;
-          _this6.pages.addChild(pageContainer);
+          _this5.pages.addChild(pageContainer);
         }
         var galleryShapeCenter = new PIXI.Point(70 + col * 90, 95 + row * 85);
 
@@ -9260,7 +9286,7 @@ var GalleryScene = function (_util$Entity4) {
         pageContainer.addChild(galleryBg);
 
         galleryBg.on("pointerdown", function (e) {
-          return _this6.onToggleShape(galleryBg, i);
+          return _this5.onToggleShape(galleryBg, i);
         });
         galleryBg.buttonMode = true;
         galleryBg.interactive = true;
@@ -9308,10 +9334,10 @@ var GalleryScene = function (_util$Entity4) {
       document.getElementById("selection-gui").style.display = "block";
       document.getElementById("done-selection").addEventListener("click", this.onDoneSelection.bind(this));
       document.getElementById("previous-page-button").addEventListener("click", function (e) {
-        return _this6.changePage(_this6.pageNumber - 1);
+        return _this5.changePage(_this5.pageNumber - 1);
       });
       document.getElementById("next-page-button").addEventListener("click", function (e) {
-        return _this6.changePage(_this6.pageNumber + 1);
+        return _this5.changePage(_this5.pageNumber + 1);
       });
 
       this.updateDoneButton();
