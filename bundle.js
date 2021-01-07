@@ -9542,7 +9542,7 @@ var metricsStartSceneEvents = {
 var searchParams = new URLSearchParams(window.location.search);
 var allowEarlyExit = searchParams.get("allowEarlyExit") !== "false" && searchParams.get("allowEarlyExit") !== "0";
 var showResults = searchParams.get("showResults") !== "false" && searchParams.get("showResults") !== "0";
-var timerValue = searchParams.get("timerValue");
+var timerValue = searchParams.get("length");
 if (timerValue != null) {
   MAX_SEARCH_TIME = parseInt(timerValue) * 60 * 1000;
   document.getElementById("game-length-sentence").innerHTML = "The game is " + parseInt(timerValue) + " minutes long.";
