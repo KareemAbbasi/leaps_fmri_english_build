@@ -8374,6 +8374,7 @@ var RED_METRICS_HOST = "api.creativeforagingtask.com";
 var RED_METRICS_GAME_VERSION = "b13751f1-637f-411b-8ce2-29b1b24fddf0";
 
 var letsPlayScene = false;
+var inTraining = true;
 
 var TRIGGERS = {
   "loadGame": 100, // When loads starts
@@ -8596,7 +8597,9 @@ var TrainingScene = function (_util$Entity2) {
     value: function finishTraining() {
       this.done = true;
       letsPlayScene = false;
+      inTraining = false;
       galleryShapes = [];
+      sceneStartedAt = Date.now();
       sendTrigger("startGame");
     }
   }, {
@@ -8796,7 +8799,6 @@ var BlockScene = function (_util$Entity3) {
   }, {
     key: "removeBlocks",
     value: function removeBlocks() {
-      console.log('hello there!!!!!');
       this.container.removeChild(this.blocksContainer);
       this.blockGrid = [];
     }
@@ -8806,6 +8808,7 @@ var BlockScene = function (_util$Entity3) {
       if (this.timesUp) return;
 
       if (timeSinceStart > MAX_SEARCH_TIME) {
+        if (inTraining) return;
         this.timesUp = true;
 
         document.getElementById("add-shape").disabled = true;
