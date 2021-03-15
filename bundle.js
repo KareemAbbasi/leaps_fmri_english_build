@@ -8756,6 +8756,10 @@ var BlockScene = function (_util$Entity3) {
           if (rect.interactive) _self.mouseOverBlock = rect;
         };
 
+        rect.mouseout = function (mouseData) {
+          _self.mouseOverBlock = null;
+        };
+
         _this4.blocksContainer.addChild(rect);
       };
 
@@ -8822,6 +8826,10 @@ var BlockScene = function (_util$Entity3) {
 
         rect.mouseover = function (mouseData) {
           if (rect.interactive) _self.mouseOverBlock = rect;
+        };
+
+        rect.mouseout = function (mouseData) {
+          _self.mouseOverBlock = null;
         };
 
         _this5.blocksContainer.addChild(rect);
@@ -9033,6 +9041,7 @@ var BlockScene = function (_util$Entity3) {
       // for the pointer event.
       if (this.draggingBlock) return; // Don't allow multiple drags
       if (this.timesUp) return; // Don't allow drags when time is up
+      if (!this.mouseOverBlock) return;
 
       this.draggingBlock = this.mouseOverBlock;
       this.draggingBlockStartGridPosition = pixelPosToGridPos(this.draggingBlock.position);
@@ -9079,10 +9088,14 @@ var BlockScene = function (_util$Entity3) {
         var keyValue = parseInt(e.key);
         if (keyValue == 1 || keyValue == 2) {
           this.onAddShape();
-        } else if (keyValue == 3) {
-          if (buttonControls) this.pickupBlockUsingButtons();
-        } else if (keyValue == 4) {
-          if (buttonControls) this.dropBlockUsingButtons();
+        } else if (keyValue == 3 || keyValue == 4) {
+          if (buttonControls) {
+            if (this.draggingBlock) {
+              this.dropBlockUsingButtons();
+            } else {
+              this.pickupBlockUsingButtons();
+            }
+          }
         }
       }
     }
